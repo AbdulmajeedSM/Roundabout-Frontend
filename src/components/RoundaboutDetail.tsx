@@ -19,7 +19,7 @@ export function RoundaboutDetail({ roundaboutId, timeRange, onBack, roundabouts,
     return <div>Roundabout not found</div>;
   }
 
-  const totalRiskyBehaviors = 
+  const totalRiskyBehaviors =
     roundabout.riskyBehaviors.wrongWay +
     roundabout.riskyBehaviors.illegalUTurn +
     roundabout.riskyBehaviors.speeding;
@@ -28,14 +28,14 @@ export function RoundaboutDetail({ roundaboutId, timeRange, onBack, roundabouts,
   const generateHistoricalData = () => {
     const dataPoints = timeRange === 'ساعة' ? 12 : timeRange === '4 ساعات' ? 24 : timeRange === 'اليوم' ? 24 : 48;
     const data = [];
-    
+
     for (let i = dataPoints - 1; i >= 0; i--) {
       const baseEntry = roundabout.vehicleEntry;
       const variation = Math.random() * 0.3 - 0.15;
-      const timeLabel = timeRange === 'الأسبوع' 
+      const timeLabel = timeRange === 'الأسبوع'
         ? `اليوم ${dataPoints - i}`
         : `${Math.floor((24 - i) % 24)}:00`;
-      
+
       data.push({
         time: timeLabel,
         entry: Math.floor(baseEntry * (1 + variation)),
@@ -43,7 +43,7 @@ export function RoundaboutDetail({ roundaboutId, timeRange, onBack, roundabouts,
         utilization: Math.floor(roundabout.laneUtilization * (1 + variation * 0.5)),
       });
     }
-    
+
     return data;
   };
 
@@ -86,9 +86,9 @@ export function RoundaboutDetail({ roundaboutId, timeRange, onBack, roundabouts,
                 className={`px-3 py-1 rounded ${getCongestionColor(roundabout.congestionLevel)} bg-opacity-10`}
                 style={{
                   backgroundColor: roundabout.congestionLevel === 'Critical' ? 'rgba(220, 38, 38, 0.1)' :
-                                    roundabout.congestionLevel === 'High' ? 'rgba(234, 88, 12, 0.1)' :
-                                    roundabout.congestionLevel === 'Moderate' ? 'rgba(202, 138, 4, 0.1)' :
-                                    'rgba(22, 163, 74, 0.1)'
+                    roundabout.congestionLevel === 'High' ? 'rgba(234, 88, 12, 0.1)' :
+                      roundabout.congestionLevel === 'Moderate' ? 'rgba(202, 138, 4, 0.1)' :
+                        'rgba(22, 163, 74, 0.1)'
                 }}
               >
                 {roundabout.congestionLevel} Congestion
@@ -109,12 +109,11 @@ export function RoundaboutDetail({ roundaboutId, timeRange, onBack, roundabouts,
           {/* Severity Score */}
           <div className="text-center">
             <div
-              className={`size-20 rounded-full flex items-center justify-center ${
-                roundabout.severityScore >= 90 ? 'bg-red-100 text-red-700' :
+              className={`size-20 rounded-full flex items-center justify-center ${roundabout.severityScore >= 90 ? 'bg-red-100 text-red-700' :
                 roundabout.severityScore >= 70 ? 'bg-orange-100 text-orange-700' :
-                roundabout.severityScore >= 50 ? 'bg-yellow-100 text-yellow-700' :
-                'bg-green-100 text-green-700'
-              }`}
+                  roundabout.severityScore >= 50 ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-green-100 text-green-700'
+                }`}
             >
               <div>
                 <div className="text-2xl">{roundabout.severityScore}</div>
@@ -129,61 +128,48 @@ export function RoundaboutDetail({ roundaboutId, timeRange, onBack, roundabouts,
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-slate-600 text-sm">Vehicle Entry</span>
+            <span className="text-slate-600 text-sm">Total Vehicle Entries</span>
             {roundabout.entryTrend === 'up' && <TrendingUp className="size-4 text-red-500" />}
             {roundabout.entryTrend === 'down' && <TrendingDown className="size-4 text-green-500" />}
             {roundabout.entryTrend === 'stable' && <Minus className="size-4 text-slate-400" />}
           </div>
           <div className="text-slate-900 text-2xl">{roundabout.vehicleEntry}</div>
-          <div className="text-slate-500 text-xs mt-1">vehicles/hour</div>
+          <div className="text-slate-500 text-xs mt-1">Total vehicles</div>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-slate-600 text-sm">Vehicle Exit</span>
+            <span className="text-slate-600 text-sm">Total Vehicle Exits</span>
             {roundabout.exitTrend === 'up' && <TrendingUp className="size-4 text-green-500" />}
             {roundabout.exitTrend === 'down' && <TrendingDown className="size-4 text-red-500" />}
             {roundabout.exitTrend === 'stable' && <Minus className="size-4 text-slate-400" />}
           </div>
           <div className="text-slate-900 text-2xl">{roundabout.vehicleExit}</div>
-          <div className="text-slate-500 text-xs mt-1">vehicles/hour</div>
+          <div className="text-slate-500 text-xs mt-1">Total vehicles</div>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-slate-600 text-sm">Lane Utilization</span>
+            <span className="text-slate-600 text-sm">Cars inside Roundabout</span>
             <Car className="size-4 text-slate-400" />
           </div>
-          <div className={`text-2xl ${roundabout.laneUtilization > 85 ? 'text-red-600' : 'text-slate-900'}`}>
-            {roundabout.laneUtilization}%
+          <div className={`text-2xl ${roundabout.laneUtilization > 8 ? 'text-red-600' : 'text-slate-900'}`}>
+            {roundabout.laneUtilization}
           </div>
-          <div className="mt-2">
-            <div className="w-full bg-slate-200 rounded-full h-2">
-              <div
-                className={`h-2 rounded-full ${
-                  roundabout.laneUtilization > 85 ? 'bg-red-500' :
-                  roundabout.laneUtilization > 70 ? 'bg-orange-500' :
-                  roundabout.laneUtilization > 50 ? 'bg-yellow-500' :
-                  'bg-green-500'
-                }`}
-                style={{ width: `${roundabout.laneUtilization}%` }}
-              ></div>
-            </div>
+          <div className="mt-2 text-xs text-slate-500">
+            Current count
           </div>
         </div>
-
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-slate-600 text-sm">Risky Behaviors</span>
+            <span className="text-slate-600 text-sm">Priority Penalty</span>
             <AlertTriangle className="size-4 text-orange-500" />
           </div>
           <div className={`text-2xl ${totalRiskyBehaviors > 20 ? 'text-red-600' : totalRiskyBehaviors > 10 ? 'text-orange-600' : 'text-slate-900'}`}>
             {totalRiskyBehaviors}
           </div>
           <div className="text-slate-500 text-xs mt-1">
-            WW: {roundabout.riskyBehaviors.wrongWay} • 
-            U: {roundabout.riskyBehaviors.illegalUTurn} • 
-            S: {roundabout.riskyBehaviors.speeding}
+            Violations detected
           </div>
         </div>
       </div>
@@ -266,12 +252,12 @@ export function RoundaboutDetail({ roundaboutId, timeRange, onBack, roundabouts,
                   <td className="py-3 px-4 text-slate-900">{row.day}</td>
                   {['6-9', '9-12', '12-15', '15-18', '18-21', '21-24'].map((timeSlot) => {
                     const value = row[timeSlot as keyof typeof row] as number;
-                    const bgColor = 
+                    const bgColor =
                       value >= 85 ? 'bg-red-500' :
-                      value >= 70 ? 'bg-orange-500' :
-                      value >= 50 ? 'bg-yellow-500' :
-                      'bg-green-500';
-                    
+                        value >= 70 ? 'bg-orange-500' :
+                          value >= 50 ? 'bg-yellow-500' :
+                            'bg-green-500';
+
                     return (
                       <td key={timeSlot} className="text-center py-3 px-4">
                         <div className={`${bgColor} text-white rounded py-2 px-3 inline-block`}>
@@ -302,8 +288,8 @@ export function RoundaboutDetail({ roundaboutId, timeRange, onBack, roundabouts,
                   <span>Frequency: {issue.frequency}</span>
                   <span className={
                     issue.severity === 'High' ? 'text-red-600' :
-                    issue.severity === 'Moderate' ? 'text-orange-600' :
-                    'text-yellow-600'
+                      issue.severity === 'Moderate' ? 'text-orange-600' :
+                        'text-yellow-600'
                   }>
                     Severity: {issue.severity}
                   </span>
